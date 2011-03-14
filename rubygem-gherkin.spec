@@ -2,7 +2,7 @@
 
 Summary:    Fast Gherkin lexer/parser
 Name:       rubygem-%{oname}
-Version:    2.2.9
+Version:    2.3.4
 Release:    %mkrel 1
 Group:      Development/Ruby
 License:    MIT
