@@ -1,67 +1,75 @@
-# Generated from gherkin-2.3.4.gem by gem2rpm5 -*- rpm-spec -*-          
-%define	rbname	gherkin
+%define oname gherkin
 
-Summary:	gherkin-2.3.4
-Name:		rubygem-%{rbname}
-
-Version:	2.3.4
-Release:	1
-Group:		Development/Ruby
-License:	MIT
-URL:		http://github.com/aslakhellesoy/gherkin
-Source0:	http://rubygems.org/gems/%{rbname}-%{version}.gem
-BuildRequires:	rubygems 
-BuildRequires:	ruby-devel
-BuildRequires:	rubygem(rake)
+Summary:    Fast Gherkin lexer/parser
+Name:       rubygem-%{oname}
+Version:    2.4.14
+Release:    %mkrel 1
+Group:      Development/Ruby
+License:    MIT
+URL:        http://github.com/aslakhellesoy/gherkin
+Source0:    http://rubygems.org/gems/%{oname}-%{version}.gem
+BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}
+Requires:   rubygems
+Requires:   rubygem(cucumber) >= 0.7.2
+Requires:   rubygem(rake-compiler) >= 0.7.0
+Requires:   rubygem(json) >= 1.4.6
+Requires:   rubygem(term-ansicolor) >= 1.0.5
+#Requires:   rubygem(awesome_print) >= 0.2.1
+Requires:   rubygem(rspec) >= 2.0.0
+BuildRequires: rubygems
+BuildRequires: ruby-devel
+Provides:   rubygem(%{oname}) = %{version}
 
 %description
 A fast Gherkin lexer/parser based on the Ragel State Machine Compiler.
 
-%package	doc
-Summary:	Documentation for %{name}
-Group:		Books/Computer books
-Requires:	%{name} = %{EVRD}
-BuildArch:	noarch
-
-%description	doc
-Documents, RDoc & RI documentation for %{name}.
-
 %prep
-%setup -q
 
 %build
-%gem_build -f '(features|ragel|spec|tasks)/'
+mkdir -p .%{ruby_gemdir}
+gem install -V --local --install-dir .%{ruby_gemdir} \
+               --force --rdoc %{SOURCE0}
 
 %install
-%gem_install
-find -name %{buildroot} -name .gitignore |xargs rm -f
+rm -rf %buildroot
+mkdir -p %{buildroot}%{ruby_gemdir}
+cp -a .%{ruby_gemdir}/* %{buildroot}%{ruby_gemdir}
+rm -rf %{buildroot}%{ruby_gemdir}/gems/%{oname}-%{version}/ext/
+find %{buildroot}%{ruby_gemdir}/gems/%{oname}-%{version}/ -name ".git*" -exec rm {} \;
+rm %{buildroot}%{ruby_gemdir}/gems/%{oname}-%{version}/.mailmap
+
+# install the sofiles in sitearchdir
+mkdir -p %{buildroot}%{ruby_sitearchdir}
+mv %{buildroot}%{ruby_gemdir}/gems/%{oname}-%{version}/lib/*.so %{buildroot}%{ruby_sitearchdir}
 
 %clean
-rm -rf %{buildroot}
+rm -rf %buildroot
 
 %files
-%dir %{ruby_gemdir}/gems/%{rbname}-%{version}
-%dir %{ruby_gemdir}/gems/%{rbname}-%{version}/features
-%{ruby_gemdir}/gems/%{rbname}-%{version}/features/*.feature
-%dir %{ruby_gemdir}/gems/%{rbname}-%{version}/features/step_definitions
-%{ruby_gemdir}/gems/%{rbname}-%{version}/features/step_definitions/*.rb
-%dir %{ruby_gemdir}/gems/%{rbname}-%{version}/features/support
-%{ruby_gemdir}/gems/%{rbname}-%{version}/features/support/*.rb
-%dir %{ruby_gemdir}/gems/%{rbname}-%{version}/lib
-%{ruby_gemdir}/gems/%{rbname}-%{version}/lib/*
-%dir %{ruby_gemdir}/gems/%{rbname}-%{version}/ragel
-%{ruby_gemdir}/gems/%{rbname}-%{version}/ragel/*
-%dir %{ruby_gemdir}/gems/%{rbname}-%{version}/spec
-%{ruby_gemdir}/gems/%{rbname}-%{version}/spec/*.rb
-%dir %{ruby_gemdir}/gems/%{rbname}-%{version}/spec/gherkin
-%{ruby_gemdir}/gems/%{rbname}-%{version}/spec/gherkin/*
-%dir %{ruby_gemdir}/gems/%{rbname}-%{version}/tasks
-%{ruby_gemdir}/gems/%{rbname}-%{version}/tasks/*
-%{ruby_gemdir}/specifications/%{rbname}-%{version}.gemspec
-%{ruby_sitearchdir}/gherkin_lexer_*.so
-
-%files doc
-%doc %{ruby_gemdir}/gems/%{rbname}-%{version}/*.rdoc
-%doc %{ruby_gemdir}/gems/%{rbname}-%{version}/*.txt
-%doc %{ruby_gemdir}/gems/%{rbname}-%{version}/LICENSE
-%doc %{ruby_gemdir}/doc/%{rbname}-%{version}
+%defattr(-, root, root, -)
+%dir %{ruby_gemdir}/gems/%{oname}-%{version}/
+%{ruby_gemdir}/gems/%{oname}-%{version}/.rspec
+%{ruby_gemdir}/gems/%{oname}-%{version}/.rvmrc
+%{ruby_gemdir}/gems/%{oname}-%{version}/*.sh
+%{ruby_gemdir}/gems/%{oname}-%{version}/features/
+%{ruby_gemdir}/gems/%{oname}-%{version}/ikvm/
+%{ruby_gemdir}/gems/%{oname}-%{version}/java/
+%{ruby_gemdir}/gems/%{oname}-%{version}/lib/
+%{ruby_gemdir}/gems/%{oname}-%{version}/ragel/
+%{ruby_gemdir}/gems/%{oname}-%{version}/js/
+%{ruby_gemdir}/gems/%{oname}-%{version}/spec/
+%{ruby_gemdir}/gems/%{oname}-%{version}/tasks/
+%{ruby_gemdir}/gems/%{oname}-%{version}/cucumber.yml
+%doc %{ruby_gemdir}/doc/%{oname}-%{version}
+%doc %{ruby_gemdir}/gems/%{oname}-%{version}/Gemfile
+%doc %{ruby_gemdir}/gems/%{oname}-%{version}/LICENSE
+%doc %{ruby_gemdir}/gems/%{oname}-%{version}/Rakefile
+%doc %{ruby_gemdir}/gems/%{oname}-%{version}/History.md
+%doc %{ruby_gemdir}/gems/%{oname}-%{version}/Gemfile.lock
+%doc %{ruby_gemdir}/gems/%{oname}-%{version}/README.md
+%doc %{ruby_gemdir}/gems/%{oname}-%{version}/.rbenv-gemsets
+%doc %{ruby_gemdir}/gems/%{oname}-%{version}/.yardopts
+%doc %{ruby_gemdir}/gems/%{oname}-%{version}/%{oname}.gemspec
+%{ruby_sitearchdir}/%{oname}*.so
+%{ruby_gemdir}/cache/%{oname}-%{version}.gem
+%{ruby_gemdir}/specifications/%{oname}-%{version}.gemspec
