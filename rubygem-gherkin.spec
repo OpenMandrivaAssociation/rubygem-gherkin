@@ -18,6 +18,7 @@ Requires:   rubygem(term-ansicolor) >= 1.0.5
 Requires:   rubygem(rspec) >= 2.0.0
 BuildRequires: rubygems
 BuildRequires: ruby-devel
+BuildRequires: ruby-doc
 Provides:   rubygem(%{oname}) = %{version}
 
 %description
