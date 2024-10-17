@@ -6,7 +6,7 @@ Release:    3
 Summary:    Fast Gherkin lexer/parser
 Group:      Development/Ruby
 License:    MIT
-URL:        http://github.com/aslakhellesoy/gherkin
+URL:        https://github.com/aslakhellesoy/gherkin
 Source0:    http://rubygems.org/downloads/%{oname}-%{version}.gem
 BuildRequires: rubygems
 BuildRequires: ruby-devel
